@@ -70,8 +70,35 @@ public class Ball : MonoBehaviour
             return;
         }
 
+        Levels.main.IncreaseStroke();
+
         Vector2 dir = (Vector2)transform.position - pos;
 
         rb.velocity = Vector2.ClampMagnitude(dir * power, maxPower);
+    }
+
+    private void CheckWinState()
+    {
+        if (scored) return;
+
+        if(rb.velocity.magnitude <= maxGoalSpeed)
+        {
+            scored = true;
+
+            rb.velocity = Vector2.zero;
+            gameObject.SetActive(false);
+
+            Levels.main.LevelFinished();
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.tag == "Hole") CheckWinState();
+    }
+
+    private void OnTriggerStay2D(Collider2D other)
+    {
+        if (other.tag == "Hole") CheckWinState();
     }
 }
