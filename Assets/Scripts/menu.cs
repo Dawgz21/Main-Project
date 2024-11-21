@@ -9,6 +9,9 @@ public class menu : MonoBehaviour
     [SerializeField] private GameObject levelPanels;
     [SerializeField] private GameObject settingPanels;
 
+    [SerializeField] AudioSource menuAudio;
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -34,5 +37,15 @@ public class menu : MonoBehaviour
         menuPanels.SetActive(false);
         levelPanels.SetActive(false);
         settingPanels.SetActive(true);
+    }
+
+    public void MusicOff()
+    {
+        menuAudio.Stop();
+    }
+
+    public void MusicOn()
+    {
+        menuAudio.Play();
     }
 }

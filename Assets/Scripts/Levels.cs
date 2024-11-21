@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class Levels : MonoBehaviour
 {
@@ -15,6 +16,7 @@ public class Levels : MonoBehaviour
     [SerializeField] private GameObject gameOverUI;
 
     private int strokes;
+  
 
     [HideInInspector] public bool levelFinished;
 
@@ -26,7 +28,9 @@ public class Levels : MonoBehaviour
     private void Start()
     {
         UpdateStrokeUI();
+
     }
+
 
     private void UpdateStrokeUI()
     {
@@ -42,10 +46,21 @@ public class Levels : MonoBehaviour
     public void LevelFinished()
     {
         levelFinished = true;
+        if(SceneManager.GetActiveScene().buildIndex == 9){
+            levelFinishedStrokeUI.text = strokes > 1 ? "You putted in " + strokes + " strokes" :
+                "Hole in one!!!";
+            //levelFinishedStrokeUI.text = "You completed the course in " + totalScore + " strokes!";
+            levelFinishedUI.SetActive(true);
+            ScoreManager.Instance.UpdateScore(strokes);
+        }
+        else
+        {
+            levelFinishedStrokeUI.text = strokes > 1 ? "You putted in " + strokes + " strokes" :
+                "Hole in one!!!";
+            levelFinishedUI.SetActive(true);
+            ScoreManager.Instance.UpdateScore(strokes);
+        }
 
-        levelFinishedStrokeUI.text = strokes > 1 ? "You putted in " + strokes + " strokes" :
-            "Hole in one!!!";
-        levelFinishedUI.SetActive(true);
     }
 
     public void GameOver()
