@@ -31,6 +31,11 @@ public class Ball : MonoBehaviour
         return rb.velocity.magnitude > 0.15f;
     }
 
+    //I was struggling so i did use some code from a YT video because I couldn't
+    //find any help on the web and I couldn't make it to lab for personal reasons.
+    //PlayerInput and Click Change were from the video the rest I was able to piece together
+    //https://www.youtube.com/watch?v=_j7ExTKwcC8&list=PLfX6C2dxVyLxRT7MjJNxblLSNHwT1M8zt&index=3
+    //and the YTers name is Muddy Wolf
     private void PlayerInput()
     {
         if (IsMoving())
@@ -42,7 +47,7 @@ public class Ball : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0) && distance <= 0.5f) ClickStart();
         if (Input.GetMouseButton(0) && isClicking) ClickChange(inputPos);
-        if (Input.GetMouseButtonUp(0) && isClicking) ClickRelease(inputPos);
+        if (Input.GetMouseButtonUp(0) && isClicking) OnRelease(inputPos);
     }
 
     private void ClickStart()
@@ -59,29 +64,26 @@ public class Ball : MonoBehaviour
         lr.SetPosition(1, (Vector2)transform.position + Vector2.ClampMagnitude((dir * power) / 2, maxPower / 2)); 
     }
 
-    private void ClickRelease(Vector2 pos)
+    private void OnRelease(Vector2 releasePosition)
     {
-        float distance = Vector2.Distance((Vector2)transform.position, pos);
         isClicking = false;
         lr.positionCount = 0;
 
-        if (distance < 1f)
+        float dragDistance = Vector2.Distance(transform.position, releasePosition);
+
+        if (dragDistance >= 1f)
         {
-            return;
+            Levels.main.IncreaseStroke();
+
+            Vector2 direction = (Vector2)transform.position - releasePosition;
+            rb.velocity = Vector2.ClampMagnitude(direction * power, maxPower);
         }
-
-        Levels.main.IncreaseStroke();
-
-        Vector2 dir = (Vector2)transform.position - pos;
-
-        rb.velocity = Vector2.ClampMagnitude(dir * power, maxPower);
     }
 
-    private void CheckWinState()
-    {
-        if (scored) return;
 
-        if(rb.velocity.magnitude <= maxGoalSpeed)
+    private void EvaluateWinCondition()
+    {
+        if (!scored && rb.velocity.magnitude <= maxGoalSpeed)
         {
             scored = true;
 
@@ -94,11 +96,11 @@ public class Ball : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.tag == "Hole") CheckWinState();
+        if (other.tag == "Hole") EvaluateWinCondition();
     }
 
     private void OnTriggerStay2D(Collider2D other)
     {
-        if (other.tag == "Hole") CheckWinState();
+        if (other.tag == "Hole") EvaluateWinCondition();
     }
 }

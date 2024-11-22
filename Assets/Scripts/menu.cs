@@ -38,7 +38,7 @@ public class menu : MonoBehaviour
         levelPanels.SetActive(false);
         settingPanels.SetActive(true);
     }
-
+    //music buttons are in the settings panel
     public void MusicOff()
     {
         menuAudio.Stop();

@@ -6031,7 +6031,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   strokeUI: {fileID: 2145502077}
   levelFinishedUI: {fileID: 1403931902}
-  levelFinishedStrokeUI: {fileID: 1809824122}
+  messageUI: {fileID: 1809824122}
+  levelFinishedStrokeUI: {fileID: 627199063}
   gameOverUI: {fileID: 37583870}
   levelFinished: 0
 --- !u!4 &1160522636

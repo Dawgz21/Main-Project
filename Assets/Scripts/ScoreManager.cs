@@ -28,12 +28,25 @@ public class ScoreManager : MonoBehaviour
 
     private void Awake()
     {
-        DontDestroyOnLoad(this);
-        Instance = this;
+        if (Instance == null)
+        {
+            DontDestroyOnLoad(this);
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+       
     }
 
     public void playButtonPressSound()
     {
         AudioSource.PlayOneShot(buttonPress);
+    }
+
+    public int TotalStrokes()
+    {
+        return totalScore;
     }
 }
